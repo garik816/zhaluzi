@@ -117,6 +117,7 @@ void modeButtonAction()
   if (newModeButton == HIGH && oldModeButton == LOW && millis() - buttonTime > debounce)
   {
     manual = !manual;
+    level = sensorValue;
     Serial.print("manual = "); Serial.print(manual); Serial.print("\n");
     buttonTime = millis();    
   }
@@ -133,11 +134,13 @@ void encoderAction()
     {
        Serial.print ("left\n");
        movetoacw(23);
+       motorZero();
     }
     else
     {
       Serial.print ("right\n");
       movetocw(23);
+      motorZero();
     }
   }
   oldEncoderPosition = newEncoderPosition;
