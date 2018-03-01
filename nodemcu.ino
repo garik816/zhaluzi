@@ -51,7 +51,6 @@ WiFiServer server(80);
 
 bool manual = 0;
 int motorDirection = 2;
-int val = 2;
 int stepcount = 0;
 
 //512 - оборот
@@ -259,27 +258,28 @@ void loop()
   // Match the request (up)
   if (req.indexOf("/?send_m=0") != -1)
   {
-    val = 0;
     manual = 1;
-    motorDirection = 0;
+    Serial.print ("up\n");
+    movetoacw(64);
+    motorZero();
   }
   // Match the request (down)
   else if (req.indexOf("/?send_m=1") != -1)
   {
-    val = 1;
     manual = 1;
-    motorDirection = 1;
+    Serial.print ("down\n");
+    movetocw(64);
+    motorZero();
   }
   // Match the request (stop)
   else if (req.indexOf("/?send_m=2") != -1)
   {
-    val = 2;
     motorDirection = 2;
     motorZero();
     manual = 1;
   }
-  // Match the request (auto)
-    else if (req.indexOf("/?send_m=4") != -1){manual = 0;}
+  // Match the request (mode)
+    else if (req.indexOf("/?send_m=4") != -1){manual = !manual; level = sensorValue;}
     
     else if (req.indexOf("/?send_l=0") != -1){level=0;}
     else if (req.indexOf("/?send_l=50") != -1){level=50;}
@@ -305,7 +305,7 @@ void loop()
     f += "<form method=\"get\" action=\"\">";
     f += "<button style=\"width:100px;height:32px\" value=\"0\" type=\"submit\" name=\"send_m\">up</button><br><br>";
     f += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"2\" type=\"submit\" name=\"send_m\">stop</button>";
-    f += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"4\" type=\"submit\" name=\"send_m\">auto</button><br><br>";
+    f += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"4\" type=\"submit\" name=\"send_m\">mode</button><br><br>";
     f += "<button style=\"width:100px;height:32px\" value=\"1\" type=\"submit\" name=\"send_m\">down</button>";
     f += "</form></fieldset>";
     f += "<fieldset><legend>level</legend>";
@@ -355,7 +355,7 @@ void loop()
     s += "<form method=\"get\" action=\"\">";
     s += "<button style=\"width:100px;height:32px\" value=\"0\" type=\"submit\" name=\"send_m\">up</button><br><br>";
     s += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"2\" type=\"submit\" name=\"send_m\">stop</button>";
-    s += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"4\" type=\"submit\" name=\"send_m\">auto</button><br><br>";
+    s += "<button style=\"width:100px;height:32px;margin-right:10px\" value=\"4\" type=\"submit\" name=\"send_m\">mode</button><br><br>";
     s += "<button style=\"width:100px;height:32px\" value=\"1\" type=\"submit\" name=\"send_m\">down</button>";
     s += "</form></fieldset>";
     s += "<fieldset><legend>level</legend>";
